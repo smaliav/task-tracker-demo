@@ -5,14 +5,8 @@ const Column = {
         const spanActionAddNote = columnElement.querySelector('[data-action-addNote]');
     
         spanActionAddNote.addEventListener('click', (e) => {
-            const noteElement = document.createElement('div');
-            noteElement.classList.add('note');
-            noteElement.setAttribute('draggable', 'true');
-            noteElement.setAttribute('data-note-id', Note.idCounter);
-    
-            Note.idCounter++;
+            noteElement = Note.create();
             columnElement.querySelector('[data-notes]').append(noteElement);
-            Note.process(noteElement);
             noteElement.setAttribute('contenteditable', 'true');
             noteElement.focus();
         })
@@ -26,5 +20,11 @@ const Column = {
         headerElement.addEventListener('blur', (e) => {
             headerElement.removeAttribute('contenteditable');
         })
+
+        columnElement.addEventListener('dragover', Column.dragover);
+    },
+
+    dragover(e) {
+        e.preventDefault();
     }
 }
