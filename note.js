@@ -52,10 +52,13 @@ const Note = {
         this.classList.remove('dragged');
     
         document.querySelectorAll('.note').forEach(x => x.classList.remove('under'));
+        e.stopPropagation();
     },
     
     dragenter(e) {
-        if (this === Node.dragged) {
+        e.stopPropagation();
+
+        if (!Note.dragged || this === Node.dragged) {
             return;
         }
     
@@ -63,15 +66,18 @@ const Note = {
     },
     
     dragover(e) {
+        e.stopPropagation();
         e.preventDefault();
     
-        if (this === Node.dragged) {
+        if (!Note.dragged || this === Node.dragged) {
             return;
         }        
     },
     
     dragleave(e) {
-        if (this === Node.dragged) {
+        e.stopPropagation();
+
+        if (!Note.dragged || this === Node.dragged) {
             return;
         }
         
