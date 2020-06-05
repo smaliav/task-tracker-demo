@@ -21,6 +21,7 @@ const Column = {
     
         headerElement.addEventListener('blur', (e) => {
             headerElement.removeAttribute('contenteditable');
+            Application.save();
         })
 
         columnElement.addEventListener('dragstart', Column.dragstart);
@@ -31,6 +32,36 @@ const Column = {
         // columnElement.addEventListener('dragleave', Column.dragleave);
 
         columnElement.addEventListener('drop', Column.drop);
+    },
+
+    create(id = null, title = '') {
+        const columnElement = document.createElement('div');
+        columnElement.classList.add('column');
+        columnElement.setAttribute('draggable', 'true');
+
+        if (id) {
+            columnElement.setAttribute('data-column-id', id);
+        } else {
+            columnElement.setAttribute('data-column-id', Column.idCounter);
+            Column.idCounter++;
+        }
+        
+        columnElement.innerHTML = `
+            <p class="column-header">Предмет</p>
+            <div data-notes>
+            </div>
+            <p class="column-footer">
+                <span data-action-addNote class="action">+ Добавить задание</span>
+            </p>
+        `;
+
+        if (title) {
+            columnElement.querySelector('.column-header').textContent = title;
+        }
+
+        Column.process(columnElement);
+
+        return columnElement;
     },
 
     dragstart(e) {
@@ -48,6 +79,8 @@ const Column = {
         Column.dropped = null;
 
         document.querySelectorAll('.note').forEach(noteElement => noteElement.setAttribute('draggable', 'true'));
+
+        Application.save();
     },
 
     // dragenter(e) {
